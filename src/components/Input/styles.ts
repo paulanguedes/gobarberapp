@@ -13,7 +13,7 @@ export const Container = styled.View`
   align-items: center;
 `;
 
-export const TextInput = styled.Text`
+export const Text = styled.TextInput`
   flex: 1;
   color: #fff;
   font-size: 16px;

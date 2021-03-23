@@ -1,10 +1,10 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import { TextInputProps } from 'react-native';
+import { TextInput, TextInputProps } from 'react-native';
 
-import { Container, TextInput, Icon } from './styles';
+import { Container, Icon } from './styles';
 
 interface InputProps extends TextInputProps {
   name: string;
@@ -16,6 +16,11 @@ const Input: React.FC<InputProps> = ({ name, icon, ...rest }) => (
     <Icon name={icon} size={20} color="#666360" />
 
     <TextInput
+      style={{
+        flex: 1,
+        color: '#fff',
+        fontFamily: 'RobotoSlab-Regular',
+      }}
       keyboardAppearance="dark"
       placeholderTextColor="#666360"
       {...rest}
