@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-console */
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
   Image,
   View,
@@ -10,6 +11,10 @@ import {
   Platform
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import { useNavigation } from '@react-navigation/native';
+
+import { Form } from '@unform/mobile';
+import { FormHandles } from '@unform/core';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -26,6 +31,13 @@ import {
 } from './styles';
 
 const SignIn: React.FC = () => {
+  const formRef = useRef<FormHandles>(null);
+  const navigation = useNavigation();
+
+  const handleSignIn = useCallback((data: object) => {
+    console.log(data)
+  }, [])
+
   return (
     <>
       <KeyboardAvoidingView
@@ -41,20 +53,22 @@ const SignIn: React.FC = () => {
             <Image source={logoImg} />
 
             <View>
-              <Title>Faça o seu logon</Title>
+              <Title>Sign in</Title>
             </View>
 
-            <Input name="email" icon="mail" placeholder="Email" />
+            <Form ref={formRef} onSubmit={handleSignIn}>
+              <Input name="email" icon="mail" placeholder="Email" />
 
-            <Input name="password" icon="lock" placeholder="Password" />
+              <Input name="password" icon="lock" placeholder="Password" />
 
-            <Button
-              onPress={() => {
-                console.log('Deu!');
-              }}
-            >
-              Entrar
-        </Button>
+              <Button
+                onPress={() => {
+                  formRef.current?.submitForm();
+                }}
+              >
+                login
+              </Button>
+            </Form>
 
             <ForgotPassword onPress={() => { }}>
               <ForgotPasswordText>Forgot my password</ForgotPasswordText>
@@ -63,10 +77,10 @@ const SignIn: React.FC = () => {
         </ScrollView>
       </KeyboardAvoidingView>
 
-      <CreateAccountButton onPress={() => { }}>
+      <CreateAccountButton onPress={() => navigation.navigate('SignUp')} >
         <Icon name="log-in" size={20} color="#ff9000" />
         <CreateAccountButtonText>
-          Criar uma conta
+          Create account
           </CreateAccountButtonText>
       </CreateAccountButton>
     </>
