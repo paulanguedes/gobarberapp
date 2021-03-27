@@ -1,6 +1,3 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable no-console */
 import React, { useCallback, useRef } from 'react';
 import {
   Image,
@@ -9,7 +6,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   TextInput,
-  Alert
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
@@ -20,6 +17,7 @@ import * as Yup from 'yup';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import getValidationErrors from '../../utils/getValidationErrors';
+import api from '../../services/api';
 
 import logoImg from '../../assets/logo.png';
 
@@ -27,7 +25,7 @@ import {
   Container,
   Title,
   BackToSignInButton,
-  BackToSignInButtonText
+  BackToSignInButtonText,
 } from './styles';
 
 interface SignUpFormData {
@@ -57,11 +55,11 @@ const SignUp: React.FC = () => {
           abortEarly: false,
         });
 
-        // await api.post('/users', data);
+        await api.post('/users', data);
 
-        // history.push('/');
+        Alert.alert('Registration completed!', 'Please logon.');
 
-
+        navigation.goBack();
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
@@ -71,9 +69,14 @@ const SignUp: React.FC = () => {
           return;
         }
 
-        Alert.alert('Registration error', 'An error occurred while registering. Try again!');
+        Alert.alert(
+          'Registration error',
+          'An error occurred while registering. Try again!',
+        );
       }
-    }, [])
+    },
+    [navigation],
+  );
 
   return (
     <>
@@ -101,7 +104,7 @@ const SignUp: React.FC = () => {
                 placeholder="Name"
                 returnKeyType="next"
                 onSubmitEditing={() => {
-                  emailInputRef.current?.focus()
+                  emailInputRef.current?.focus();
                 }}
               />
 
@@ -115,7 +118,7 @@ const SignUp: React.FC = () => {
                 placeholder="Email"
                 returnKeyType="next"
                 onSubmitEditing={() => {
-                  passwordInputRef.current?.focus()
+                  passwordInputRef.current?.focus();
                 }}
               />
 
@@ -130,22 +133,17 @@ const SignUp: React.FC = () => {
                 onSubmitEditing={() => formRef.current?.submitForm()}
               />
 
-              <Button
-                onPress={() => formRef.current?.submitForm()}
-              >
-                Entrar
+              <Button onPress={() => formRef.current?.submitForm()}>
+                Sign up
               </Button>
             </Form>
-
           </Container>
         </ScrollView>
       </KeyboardAvoidingView>
 
       <BackToSignInButton onPress={() => navigation.goBack()}>
         <Icon name="arrow-left" size={20} color="#fff" />
-        <BackToSignInButtonText>
-          Go back to sign in
-          </BackToSignInButtonText>
+        <BackToSignInButtonText>Go back to sign in</BackToSignInButtonText>
       </BackToSignInButton>
     </>
   );

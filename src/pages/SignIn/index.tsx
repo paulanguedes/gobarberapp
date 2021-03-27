@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable no-console */
+/* eslint-disable prettier/prettier */
 import React, { useCallback, useRef } from 'react';
 import {
   Image,
@@ -10,7 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   TextInput,
-  Alert
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
@@ -18,6 +16,7 @@ import * as Yup from 'yup';
 
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
+import { useAuth } from '../../hooks/auth';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -31,7 +30,7 @@ import {
   ForgotPassword,
   ForgotPasswordText,
   CreateAccountButton,
-  CreateAccountButtonText
+  CreateAccountButtonText,
 } from './styles';
 
 interface SignInFormData {
@@ -45,8 +44,7 @@ const SignIn: React.FC = () => {
 
   const navigation = useNavigation();
 
-  // passwordInputRef.current?.focus()
-
+  const { signIn } = useAuth();
 
   const handleSignIn = useCallback(
     async (data: SignInFormData) => {
@@ -61,12 +59,10 @@ const SignIn: React.FC = () => {
           abortEarly: false,
         });
 
-        // await signIn({
-        //   email: data.email,
-        //   password: data.password,
-        // });
-
-        // history.push('/dashboard');
+        await signIn({
+          email: data.email,
+          password: data.password,
+        });
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
@@ -76,13 +72,11 @@ const SignIn: React.FC = () => {
           return;
         }
 
-        Alert.alert('Authentication error', 'Please check your credentials')
-
+        Alert.alert('Authentication error', 'Please check your credentials');
       }
     },
-    [],
+    [signIn],
   );
-
 
   return (
     <>
@@ -111,7 +105,9 @@ const SignIn: React.FC = () => {
                 icon="mail"
                 placeholder="Email"
                 returnKeyType="next"
-                onSubmitEditing={() => { passwordInputRef.current?.focus(); }}
+                onSubmitEditing={() => {
+                  passwordInputRef.current?.focus();
+                }}
               />
 
               <Input
@@ -121,7 +117,9 @@ const SignIn: React.FC = () => {
                 icon="lock"
                 placeholder="Password"
                 returnKeyType="send"
-                onSubmitEditing={() => { formRef.current?.submitForm() }}
+                onSubmitEditing={() => {
+                  formRef.current?.submitForm();
+                }}
               />
 
               <Button
@@ -140,11 +138,9 @@ const SignIn: React.FC = () => {
         </ScrollView>
       </KeyboardAvoidingView>
 
-      <CreateAccountButton onPress={() => navigation.navigate('SignUp')} >
+      <CreateAccountButton onPress={() => navigation.navigate('SignUp')}>
         <Icon name="log-in" size={20} color="#ff9000" />
-        <CreateAccountButtonText>
-          Create account
-          </CreateAccountButtonText>
+        <CreateAccountButtonText>Create account</CreateAccountButtonText>
       </CreateAccountButton>
     </>
   );
