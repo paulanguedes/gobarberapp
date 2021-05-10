@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable import/prefer-default-export */
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import styled from 'styled-components/native';
@@ -13,9 +14,14 @@ interface ProviderNameProps {
   selected: boolean;
 }
 
-export const Container = styled.View`
-  flex: 1;
-`;
+interface HourProps {
+  available: boolean;
+  selected: boolean;
+}
+
+interface HourTextProps {
+  selected: boolean;
+}
 
 export const Header = styled.View`
   padding: 24px;
@@ -26,6 +32,8 @@ export const Header = styled.View`
   justify-content: space-between;
   align-items: center;
 `;
+
+export const Content = styled.ScrollView``;
 
 export const BackButton = styled.TouchableOpacity``;
 
@@ -41,6 +49,10 @@ export const UserAvatar = styled.Image`
   height: 56px;
   border-radius: 28px;
   margin-left: auto;
+`;
+
+export const Container = styled.View`
+  flex: 1;
 `;
 
 export const ProvidersListContainer = styled.View`
@@ -95,4 +107,40 @@ export const OpenDatePickerButtonText = styled.Text`
   font-family: 'RobotoSlab-Medium';
   font-size: 16px;
   color: #232129;
+`;
+
+export const Schedule = styled.View`
+  padding: 24px 0 16px;
+`;
+
+export const Section = styled.View`
+  margin-bottom: 24px;
+`;
+
+export const SectionTitle = styled.Text`
+  font-size: 18px;
+  color: #999591;
+  font-family: 'RobotoSlab-Regular';
+  margin: 0 24px 12px;
+`;
+
+export const SectionContent = styled.ScrollView.attrs({
+  contentContainerStyle: { paddingHorizontal: 24 },
+  horizontal: true,
+  showsHorizontalScrollIndicator: false,
+})``;
+
+export const Hour = styled(RectButton) <HourProps>`
+  padding: 12px;
+  background: ${props => (props.selected ? '#ff9000' : '#3e3b41')};
+  border-radius: 10px;
+  margin-right: 8px;
+
+  opacity: ${props => (props.available ? 1 : 0.3)};
+`;
+
+export const HourText = styled.Text<HourTextProps>`
+  color: ${props => (props.selected ? '#232129' : '#f4ede8')};
+  font-family: 'RobotoSlab-Regular';
+  font-size: 16;
 `;
